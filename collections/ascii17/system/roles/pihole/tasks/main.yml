@@ -1,0 +1,8 @@
+---
+- name: Add http proxy global variables
+  ansible.builtin.lineinfile:
+    dest: "{{ dns_host_path }}"
+    state: present
+    regexp: "^{{ item.key }}"
+    line: "{{ item.key }} {{ item.value }}"
+  with_items: "{{ dns_hosts }}"

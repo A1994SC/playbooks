@@ -1,0 +1,15 @@
+---
+{% if args_list is defined and (args_list | length > 0) %}
+{% for key, value in args_list.items() %}
+{% if value | type_debug == "list" %}
+{{ key | replace('_','-') }}:
+{% for arg in value %}
+  - {{ arg }}
+{% endfor %}
+{% else %}
+{% if value != "" %}
+{{ key | replace('_','-') }}: {{ value }}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}

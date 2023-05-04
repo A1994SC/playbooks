@@ -1,0 +1,18 @@
+namespace: ascii17
+name: fedora
+version: 1.0.0
+
+readme: README.md
+
+authors:
+- Allen Conlon <allen@conlon.dev>
+
+description: Plays for configuring Fedora
+
+tags:
+- "fedora"
+
+dependencies: {}
+
+repository: https://github.com/A1994SC/playbooks
+issues: https://github.com/A1994SC/playbooks/issues

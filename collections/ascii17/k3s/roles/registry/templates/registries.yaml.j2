@@ -1,0 +1,36 @@
+---
+{% if reg_mirrors is defined and (reg_mirrors | length > 0) %}
+mirrors:
+{% for mirror in reg_mirrors %}
+  {{ mirror.base_url }}:
+    endpoint:
+      - "{{ mirror.mirror_proto | default('https://') }}{{ mirror.mirror_url }}"
+{% if mirror.rewrite_regex is defined and mirror.rewrite_path is defined %}
+    rewrite:
+      "{{ mirror.rewrite_regex }}": "{{ mirror.rewrite_path }}{{ mirror.rewrite_path_extra | default('$1')}}"
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if reg_configs is defined and (reg_configs | length > 0) %}
+configs:
+{% for config in reg_configs %}
+  "{{ config.url }}":
+{% if config.auth is defined or (config.user is defined and config.pass is defined) %}
+    auth:
+{% if config.auth is defined %}
+      auth: "{{ config.auth }}"
+{% endif %}
+{% if config.user is defined and config.pass is defined %}
+      username: "{{ config.user }}"
+      password: "{{ config.pass }}"
+{% endif %}
+{% endif %}
+{% if config.tls_path is defined and config.tls_path | length > 0 %}
+    tls:
+      ca_file: "{{ config.tls_path }}"
+{% if config.tls_insec is defined %}
+      insecure_skip_verify: {{ config.tls_insec | bool | lower }}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endif %}

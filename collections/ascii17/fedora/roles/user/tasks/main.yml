@@ -1,0 +1,6 @@
+---
+- name: Set authorized keys taken from url
+  ansible.builtin.authorized_key:
+    user: "{{ ansible_user_id }}"
+    state: present
+    key: https://github.com/A1994SC.keys

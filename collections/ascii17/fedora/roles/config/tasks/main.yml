@@ -1,0 +1,87 @@
+---
+- name: Set same timezone on every Server
+  timezone:
+    name: "{{ system_timezone }}"
+  when: (system_timezone is defined) and (system_timezone != "Your/Timezone")
+  tags:
+  - user
+
+- name: Install the latest version of htop, nano, and crictl
+  ansible.builtin.dnf:
+    name:
+      - htop
+      - nano
+      - crictl
+    state: latest
+  when: ansible_os_family == "RedHat"
+  tags:
+  - user
+
+- name: Remove zram from system
+  ansible.builtin.dnf:
+    name:
+      - zram-generator-defaults
+    state: absent
+  when: ansible_os_family == "RedHat"
+  tags:
+  - user
+
+- name: Update the Red Hat systems
+  ansible.builtin.dnf:
+    name:  "*"
+    state: latest
+  when: ansible_os_family == "RedHat"
+  tags:
+  - update
+
+- name: Set authorized keys taken from url
+  ansible.builtin.authorized_key:
+    user: ascii
+    state: present
+    key: https://github.com/A1994SC.keys
+  tags:
+  - user
+
+- name: Stop the cockpit service and socket
+  ansible.builtin.systemd:
+    name: '{{ item }}'
+    state: stopped
+    enabled: no
+    masked: yes
+  with_items:
+    - cockpit.service
+    - cockpit.socket
+  when: ansible_os_family == "RedHat"
+  tags:
+  - cleanup
+
+- name: "Removing files"
+  ansible.builtin.file:
+    path: '{{ item }}'
+    state: absent
+  with_items:
+    - /etc/issue.d/cockpit.issue
+    - /etc/motd.d/cockpit
+    - /etc/containerd/config.toml
+    - /etc/crio/crio.conf
+    - /etc/systemd/system/k3s.service
+  when: ansible_os_family == "RedHat"
+  tags:
+  - cleanup
+
+- name: Create rancher folder
+  file:
+    path: /var/lib/rancher/
+    state: directory
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+  - cleanup
+
+- name: Change hostname
+  ansible.builtin.command:
+    cmd: "hostnamectl set-hostname --static {{ derp_name }}"
+  when: ansible_os_family == "RedHat" and derp_name is defined
+  tags:
+  - hostname

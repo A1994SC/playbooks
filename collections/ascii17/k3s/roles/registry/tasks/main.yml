@@ -1,0 +1,9 @@
+---
+- name: Update "{{ etc_path }}/registries.yaml"
+  template:
+    src: "registries.yaml.j2"
+    dest: "{{ etc_path }}/registries.yaml"
+    mode: 0640
+  vars:
+    reg_mirrors: "{{ registries_mirrors }}"
+    reg_configs: "{{ registries_configs }}"

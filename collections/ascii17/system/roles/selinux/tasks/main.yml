@@ -1,0 +1,7 @@
+---
+- name: Set SELinux state
+  selinux:
+    state: "{{ state | default('disabled') }}"
+  when: ansible_os_family == "RedHat"
+  tags:
+  - security

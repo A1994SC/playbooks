@@ -1,0 +1,4 @@
+---
+git_url: https://github.com/A1994SC/nixos-configs.git
+git_path: /etc/nixos
+nix_bin_path: /run/current-system/sw/bin

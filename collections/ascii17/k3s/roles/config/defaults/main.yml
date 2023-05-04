@@ -1,0 +1,3 @@
+---
+etc_path: /etc/rancher/k3s
+var_path: /var/lib/rancher/k3s

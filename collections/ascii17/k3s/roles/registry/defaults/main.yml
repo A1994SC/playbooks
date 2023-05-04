@@ -1,0 +1,19 @@
+---
+etc_path: /etc/rancher/k3s
+var_path: /var/lib/rancher/k3s
+
+# reg_mirrors:
+# - base_url: "docker.io"
+#   mirror_proto: "https://"
+#   mirror_url: "example.com"
+#   rewrite_regex: "^(.*)"
+#   rewrite_path: docker-io/
+
+# reg_configs:
+# - url: "exampe.com"
+#   auth: "flas"
+#   tls_path: "/etc/pki/tls/certs/ca-bundle.trust.crt"
+# - url: "exampe.com"
+#   user: "username"
+#   pass: "password"
+#   tls_path: "/etc/pki/tls/certs/ca-bundle.trust.crt"
