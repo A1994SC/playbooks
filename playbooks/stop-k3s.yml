@@ -1,0 +1,8 @@
+---
+- hosts: kubernetes_cluster
+  become: false
+  tasks:
+  - name: Stop k3s
+    import_role:
+      name: ascii17.k3s.stop
+

@@ -1,0 +1,10 @@
+- hosts: all
+  become: true
+  tasks:
+  - name: Configure the user
+    import_role:
+      name: ascii17.system.user
+
+  - name: Configure the user
+    import_role:
+      name: ascii17.system.user

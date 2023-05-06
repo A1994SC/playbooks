@@ -1,0 +1,50 @@
+---
+- hosts: kubernetes_cluster
+  become: true
+  tasks:
+#   - name: Make users passwordless for sudo in group wheel
+#     lineinfile:
+#       path: /etc/sudoers
+#       state: present
+#       regexp: '^%wheel'
+#       line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+#       validate: 'visudo -cf %s'
+#   - name: Disable the firewall
+#     import_role:
+#       name: ascii17.system.firewall
+
+#   - name: Disable the selinux
+#     import_role:
+#       name: ascii17.system.selinux
+
+  - name: System hosts config
+    import_role:
+      name: ascii17.system.hosts
+
+#   - name: Download k3s binary
+#     import_role:
+#       name: ascii17.k3s.download
+
+  - name: Populate k3s folders
+    import_role:
+      name: ascii17.k3s.folders
+
+#   - name: Populate k3s registry files
+#     import_role:
+#       name: ascii17.k3s.registry
+#     when: registries_mirrors is defined or registries_configs is defined
+
+  - name: Populate k3s config files
+    import_role:
+      name: ascii17.k3s.config
+
+  - name: Populate k3s service files
+    import_role:
+      name: ascii17.k3s.service
+
+- hosts: localhost
+  become: true
+  tasks:
+  - name: Generate the kubectl context
+    import_role:
+      name: ascii17.kubernetes.client
