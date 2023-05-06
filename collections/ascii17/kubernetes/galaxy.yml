@@ -1,0 +1,15 @@
+namespace: ascii17
+name: kubernetes
+version: 1.0.0
+
+readme: README.md
+
+authors:
+- Allen Conlon <allen@conlon.dev>
+
+description: Plays for kubernetes
+
+dependencies: {}
+
+repository: https://github.com/A1994SC/playbooks
+issues: https://github.com/A1994SC/playbooks/issues

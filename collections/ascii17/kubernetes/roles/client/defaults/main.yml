@@ -1,3 +1,5 @@
 ---
 etc_path: /etc/rancher/k3s
 var_path: /var/lib/rancher/k3s
+kube_path: ~/.kube
+tls_path: "{{ kube_path }}/tls"

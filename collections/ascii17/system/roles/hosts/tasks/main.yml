@@ -1,0 +1,46 @@
+---
+- name: Update "/etc/hosts"
+  ansible.builtin.template:
+    src: "hosts.j2"
+    dest: "/etc/hosts"
+    owner: root
+    group: root
+    backup: true
+    mode: 0644
+  tags:
+    - hosts
+
+- name: Copy anchor certs
+  ansible.builtin.template:
+    src: "certs/{{ item }}"
+    dest: "/etc/pki/ca-trust/source/anchors/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  when: certs_list is defined
+  loop: "{{ certs_list }}"
+
+- name: Update system trust
+  ansible.builtin.command:
+    argv:
+      - update-ca-trust
+      - extract
+
+- name: Ensure /etc/environment exists
+  ansible.builtin.copy:
+    content: ""
+    dest: /etc/environment
+    force: false
+    group: root
+    owner: root
+    mode: 0644
+  when: os_environment is defined
+
+- name: Add global vars
+  ansible.builtin.lineinfile:
+    dest: "/etc/environment"
+    state: present
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value }}"
+  when: os_environment is defined
+  with_items: "{{ os_environment }}"

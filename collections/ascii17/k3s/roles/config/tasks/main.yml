@@ -24,7 +24,8 @@
     ansible.builtin.shell:
       cmd: "tr -dc A-Za-z0-9 </dev/urandom | head -c 64 ; echo ''"
     register: token_encoded
-    delegate_to: localhost
+    # delegate_to: localhost
+    delegate_to: "{{ groups['control_plane'][0] }}"
     ignore_errors: true
     run_once: true
 
@@ -36,60 +37,27 @@
     run_once: true
   when: not token_presence.stat.exists
 
-- name: Update "{{ etc_path }}/config.yaml" on the control-planes
+- name: Update "{{ etc_path }}/config.yaml" file
   template:
     src: "config.yaml.j2"
     dest: "{{ etc_path }}/config.yaml"
     mode: 0640
-
-- name: Update "{{ etc_path }}/config.yaml" on {{ groups['control_plane'][0]['inventory_hostname_short'] }}
-  template:
-    src: "config.yaml.j2"
-    dest: "{{ etc_path }}/config.yaml"
-    mode: 0640
-  when: inventory_hostname in groups['control_plane'][0]
   vars:
-    args_list:
-      node-name: "{{ ansible_hostname }}"
-      token: "{{ token }}"
-
-- name: Update "{{ etc_path }}/config.yaml" on the control-planes
-  template:
-    src: "config.yaml.j2"
-    dest: "{{ etc_path }}/config.yaml"
-    mode: 0640
-  when: inventory_hostname in groups['control_plane'] and inventory_hostname not in groups['control_plane'][0]
-  vars:
-    args_list:
-      node-name: "{{ ansible_hostname }}"
-      server: "https://{{ groups['control_plane'][0] }}:6443"
-      token: "{{ token }}"
-
-- name: Update "{{ etc_path }}/config.yaml" on the non-control-planes
-  template:
-    src: "config.yaml.j2"
-    dest: "{{ etc_path }}/config.yaml"
-    mode: 0640
-  when: inventory_hostname not in groups['control_plane']
-  vars:
-    args_list:
-      node-name: "{{ ansible_hostname }}"
-      server: "https://{{ round_robin_dns | default(groups['control_plane'][0]) }}:6443"
-      token: "{{ token }}"
+    args_list: "{{ config_yaml_contents }}"
 
 - name: Update "{{ etc_path }}/audit.yml"
   template:
     src: "audit.yml.j2"
     dest: "{{ etc_path }}/audit.yml"
     mode: 0640
-  when: audit_rules is defined
+  when: k3s_audit_rules is defined
 
 - name: Update "{{ var_path }}/kublet-config.yml"
   template:
     src: "kublet-config.yml.j2"
     dest: "{{ var_path }}/kublet-config.yml"
     mode: 0640
-  when: kublet_args is defined
+  when: k3s_kublet_args is defined
 
 - name: Create "{{ etc_path }}/config.yaml.d" folder
   ansible.builtin.file:
@@ -102,4 +70,4 @@
     dest: "{{ etc_path }}/config.yaml.d/node.yaml"
     mode: 0640
   vars:
-    args_list: "{{ config_yaml_contents }}"
+    args_list: "{{ config_node_yaml_contents }}"

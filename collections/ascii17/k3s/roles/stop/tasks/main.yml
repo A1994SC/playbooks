@@ -1,0 +1,5 @@
+---
+- name: Stop the k3s service
+  ansible.builtin.systemd:
+    name: k3s
+    state: stopped

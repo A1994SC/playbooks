@@ -1,0 +1,15 @@
+127.0.0.1   localhost
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+# ansible cluster hosts
+{% for item in play_hosts %}
+{% set short_name = item.split('.') %}
+{{ hostvars[item]['ansible_host'] }}  {{ item }} {{ short_name[0] }}
+{% endfor %}
+
+# ansible extra hosts
+{% if extra_host_list is defined and (extra_host_list | length > 0)  %}
+{% for extra_host in extra_host_list %}
+{{ extra_host }}
+{% endfor %}
+{% endif %}
