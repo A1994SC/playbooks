@@ -5,8 +5,6 @@
       - nano
     state: latest
   when: ansible_os_family == "RedHat"
-  tags:
-  - user
 
 - name: Remove zram from system
   ansible.builtin.dnf:
@@ -14,13 +12,14 @@
       - zram-generator-defaults
     state: absent
   when: ansible_os_family == "RedHat"
-  tags:
-  - user
+  register: zramgen
+
+- name: Reboot the systems
+  ansible.builtin.reboot:
+  when: zramgen.changed
 
 - name: Update the Red Hat systems
   ansible.builtin.dnf:
     name:  "*"
     state: latest
   when: ansible_os_family == "RedHat"
-  tags:
-  - update

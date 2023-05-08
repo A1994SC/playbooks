@@ -22,6 +22,7 @@
       dest: "{{ tls_path }}/"
       flat: true
     delegate_to: "{{ groups.control_plane[0] }}"
+    become: true
     loop:
       - "{{ var_path }}/server/tls/server-ca.crt"
       - "{{ var_path }}/server/tls/client-admin.crt"
@@ -29,19 +30,19 @@
 
   - name: Update kubectl {{ kubeconfig_context }} cluster
     ansible.builtin.shell:
-      cmd: "kubectl --kubeconfig {{ kubeconfig_path }} config set-cluster {{ kubeconfig_context }} --server https://{{ round_robin_dns | default(groups['control_plane'][0]) }}:{{ tls_port | default('6443') }} --certificate-authority {{ tls_path }}/server-ca.crt --embed-certs"
+      cmd: "kubectl config set-cluster {{ kubeconfig_context }} --server https://{{ round_robin_dns | default(groups['control_plane'][0]) }}:{{ tls_port | default('6443') }} --certificate-authority {{ tls_path }}/server-ca.crt --embed-certs"
 
   - name: Update kubectl {{ kubeconfig_context }} creds
     ansible.builtin.shell:
-      cmd: "kubectl --kubeconfig {{ kubeconfig_path }} config set-credentials {{ kubeconfig_context }} --client-certificate {{ tls_path }}/client-admin.crt --client-key {{ tls_path }}/client-admin.key  --embed-certs"
+      cmd: "kubectl config set-credentials {{ kubeconfig_context }} --client-certificate {{ tls_path }}/client-admin.crt --client-key {{ tls_path }}/client-admin.key  --embed-certs"
 
   - name: Update kubectl {{ kubeconfig_context }} context
     ansible.builtin.shell:
-      cmd: "kubectl --kubeconfig {{ kubeconfig_path }} config set-context {{ kubeconfig_context }} --cluster {{ kubeconfig_context }} --user {{ kubeconfig_context }}"
+      cmd: "kubectl config set-context {{ kubeconfig_context }} --cluster {{ kubeconfig_context }} --user {{ kubeconfig_context }}"
 
   - name: Set kubectl context to {{ kubeconfig_context }}
     ansible.builtin.shell:
-      cmd: "kubectl --kubeconfig {{ kubeconfig_path }} config use-context {{ kubeconfig_context }}"
+      cmd: "kubectl config use-context {{ kubeconfig_context }}"
 
   always:
   - name: Delete kube certs

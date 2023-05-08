@@ -9,7 +9,8 @@ authors:
 
 description: Plays for kubernetes
 
-dependencies: {}
+dependencies:
+  "kubernetes.core": "2.4.0"
 
 repository: https://github.com/A1994SC/playbooks
 issues: https://github.com/A1994SC/playbooks/issues

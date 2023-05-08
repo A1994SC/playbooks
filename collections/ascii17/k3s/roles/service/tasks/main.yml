@@ -12,6 +12,7 @@
   - name: Start the k3s service
     ansible.builtin.systemd:
       name: k3s
+      enabled: true
       daemon_reload: true
       state: started
     when: inventory_hostname in groups['control_plane']
@@ -25,6 +26,7 @@
   - name: Start the k3s service
     ansible.builtin.systemd:
       name: k3s
+      enabled: true
       daemon_reload: true
       state: started
     when: inventory_hostname not in groups['control_plane']

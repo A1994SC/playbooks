@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Generate the kubectl context
+    import_role:
+      name: ascii17.kubernetes.client

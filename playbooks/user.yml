@@ -1,10 +1,19 @@
+---
+# configure the ssh user
 - hosts: all
-  become: true
+  become: false
   tasks:
   - name: Configure the user
     import_role:
       name: ascii17.system.user
 
+- hosts: all
+  become: true
+  tasks:
   - name: Configure the user
     import_role:
-      name: ascii17.system.user
+      name: ascii17.fedora.config
+
+  - name: Configure the user
+    import_role:
+      name: ascii17.fedora.cockpit

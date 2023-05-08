@@ -3,5 +3,8 @@
   selinux:
     state: "{{ state | default('disabled') }}"
   when: ansible_os_family == "RedHat"
-  tags:
-  - security
+  register: selinuxstate
+
+- name: Reboot the systems
+  ansible.builtin.reboot:
+  when: selinuxstate.changed
