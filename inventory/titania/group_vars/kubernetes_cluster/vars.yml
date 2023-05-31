@@ -1,0 +1,6 @@
+---
+k3s_version: v1.26.4+k3s1
+
+k3s_kublet_args: |
+  shutdownGracePeriod: 30s
+  shutdownGracePeriodCriticalPods: 10s

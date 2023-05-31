@@ -12,7 +12,7 @@
   ansible.builtin.git:
     repo: "{{ git_url }}"
     dest: "{{ git_path }}"
-    update: yes
+    update: true
     version: main
   tags:
   - nixos
@@ -22,8 +22,8 @@
 - name: Dry build config
   ansible.builtin.command:
     argv:
-      - "{{ nix_bin_path }}/nixos-rebuild"
-      - dry-build
+    - "{{ nix_bin_path }}/nixos-rebuild"
+    - dry-build
   tags:
   - nixos
   - dry
@@ -31,8 +31,8 @@
 - name: Switch config
   ansible.builtin.command:
     argv:
-      - "{{ nix_bin_path }}/nixos-rebuild"
-      - switch
+    - "{{ nix_bin_path }}/nixos-rebuild"
+    - switch
   tags:
   - nixos
   - upgrade

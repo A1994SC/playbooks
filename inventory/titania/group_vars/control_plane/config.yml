@@ -1,0 +1,46 @@
+service_type: server
+
+k3s_audit_rules: |
+  - level: Metadata
+
+config_yaml_contents:
+  node-name: "{{ ansible_hostname }}"
+  server: "https://{{ groups['control_plane'][0] }}:6443"
+  token: "{{ token }}"
+
+config_node_yaml_contents:
+  write-kubeconfig-mode: "0600"
+  node-label:
+  - adrp.xyz/purpose=control-plane
+  disable:
+  - coredns
+  - servicelb
+  - traefik
+  - local-storage
+  - metrics-server
+  disable-network-policy: true
+  secrets-encryption: true
+  tls-san: "{{ [ round_robin_dns | default(groups['control_plane'][0]) ] + groups['control_plane'] }}"
+  kubelet-arg:
+  - node-status-update-frequency=5s
+  - config={{ var_path }}/kublet-config.yml
+  kube-apiserver-arg:
+  - default-not-ready-toleration-seconds=30
+  - default-unreachable-toleration-seconds=30
+  - feature-gates=GracefulNodeShutdown=true
+  - feature-gates=GracefulNodeShutdownBasedOnPodPriority=true
+  - audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log
+  - audit-policy-file={{ etc_path }}/audit.yml
+  - audit-log-maxage=30
+  - audit-log-maxbackup=10
+  - audit-log-maxsize=100
+  - request-timeout=300s
+  - service-account-lookup=true
+  kube-controller-manager-arg:
+  - node-monitor-period=20s
+  - node-monitor-grace-period=20s
+  - terminated-pod-gc-threshold=10
+  - use-service-account-credentials=true
+  kube-proxy-arg:
+  - ipvs-strict-arp=true
+  flannel-backend: none

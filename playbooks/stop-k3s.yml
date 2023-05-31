@@ -5,4 +5,3 @@
   - name: Stop k3s
     import_role:
       name: ascii17.k3s.stop
-

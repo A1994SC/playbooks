@@ -1,0 +1,13 @@
+---
+gitops_known_hosts: github.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKSENjQEezOmxkZMy7opKgwFB9nkt5YRrYMjNuG5N87uRgg6CLrbo5wAdT/y6v0mKV0U2w0WZ2YB/++Tpockg=
+
+kubernetes_create_secrets:
+- name: sops-gpg
+  namespace: flux-system
+  stringData:
+    sops.asc: "{{ gitops_key }}"
+- name: fluxcd-auth
+  namespace: flux-system
+  stringData:
+    identity: "{{ gitops_ssh_key }}"
+    known_hosts: "{{ gitops_known_hosts }}"

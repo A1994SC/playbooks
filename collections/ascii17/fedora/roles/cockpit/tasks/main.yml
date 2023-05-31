@@ -3,16 +3,16 @@
   ansible.builtin.systemd:
     name: '{{ item }}'
     state: stopped
-    enabled: no
-    masked: yes
+    enabled: false
+    masked: true
   with_items:
-    - cockpit.service
-    - cockpit.socket
+  - cockpit.service
+  - cockpit.socket
 
 - name: "Removing files"
   ansible.builtin.file:
     path: '{{ item }}'
     state: absent
   with_items:
-    - /etc/issue.d/cockpit.issue
-    - /etc/motd.d/cockpit
+  - /etc/issue.d/cockpit.issue
+  - /etc/motd.d/cockpit

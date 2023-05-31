@@ -4,5 +4,5 @@
     path: "{{ item }}"
     state: directory
   loop:
-    - "{{ etc_path }}"
-    - "{{ var_path }}"
+  - "{{ etc_path }}"
+  - "{{ var_path }}"

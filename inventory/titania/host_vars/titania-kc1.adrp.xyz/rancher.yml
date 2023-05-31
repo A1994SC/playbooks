@@ -1,0 +1,4 @@
+config_yaml_contents:
+  node-name: "{{ ansible_hostname }}"
+  token: "{{ token }}"
+  cluster-init: true

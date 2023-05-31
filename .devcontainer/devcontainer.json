@@ -1,0 +1,23 @@
+{
+  "image": "docker.io/ubuntu:22.04",
+  "mounts": [
+    "type=bind,source=${localEnv:HOME}/.ssh,target=/home/jenkins/.ssh,readonly",
+    "type=bind,source=${localEnv:HOME}/.gitconfig,target=/home/jenkins/.gitconfig,readonly"
+  ],
+  "runArgs": [ "--pull=always" ],
+  "updateRemoteUserUID": false,
+  "privileged": false,
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "mhutchie.git-graph",
+        "waderyan.gitblame",
+        "streetsidesoftware.code-spell-checker",
+        "hashicorp.hcl",
+        "hashicorp.terraform",
+        "ms-vscode.notepadplusplus-keybindings",
+        "hediet.vscode-drawio"
+      ]
+    }
+  }
+}

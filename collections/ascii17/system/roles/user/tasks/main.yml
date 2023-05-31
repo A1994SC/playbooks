@@ -3,4 +3,4 @@
   ansible.builtin.authorized_key:
     user: "{{ ansible_user_id }}"
     state: present
-    key: https://github.com/A1994SC.keys
+    key: "{{ public_keys }}"

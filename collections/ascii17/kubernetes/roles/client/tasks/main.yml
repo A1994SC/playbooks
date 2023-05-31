@@ -24,9 +24,9 @@
     delegate_to: "{{ groups.control_plane[0] }}"
     become: true
     loop:
-      - "{{ var_path }}/server/tls/server-ca.crt"
-      - "{{ var_path }}/server/tls/client-admin.crt"
-      - "{{ var_path }}/server/tls/client-admin.key"
+    - "{{ var_path }}/server/tls/server-ca.crt"
+    - "{{ var_path }}/server/tls/client-admin.crt"
+    - "{{ var_path }}/server/tls/client-admin.key"
 
   - name: Update kubectl {{ kubeconfig_context }} cluster
     ansible.builtin.shell:

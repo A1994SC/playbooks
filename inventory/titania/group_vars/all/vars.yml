@@ -1,0 +1,10 @@
+---
+ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o UserKnownHostsFile=~/.ssh/know_hosts.d/titania'
+
+round_robin_dns: titania-kc.adrp.xyz
+kubeconfig_context: titania
+
+certs_list:
+- derpy.crt
+- derpy-int.crt
+- derpy-jump.crt

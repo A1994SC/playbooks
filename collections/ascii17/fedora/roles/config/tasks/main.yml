@@ -1,25 +1,20 @@
 ---
-- name: Install the latest version of htop, nano, and crictl
+- name: Install the latest version of nano
   ansible.builtin.dnf:
     name:
-      - nano
+    - nano
     state: latest
-  when: ansible_os_family == "RedHat"
 
 - name: Remove zram from system
   ansible.builtin.dnf:
     name:
-      - zram-generator-defaults
+    - zram-generator-defaults
     state: absent
-  when: ansible_os_family == "RedHat"
-  register: zramgen
-
-- name: Reboot the systems
-  ansible.builtin.reboot:
-  when: zramgen.changed
+  notify:
+  - Reboot the systems
 
 - name: Update the Red Hat systems
   ansible.builtin.dnf:
-    name:  "*"
+    name: "*"
     state: latest
   when: ansible_os_family == "RedHat"

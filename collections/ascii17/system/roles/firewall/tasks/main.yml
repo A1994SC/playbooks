@@ -3,5 +3,5 @@
   service:
     name: firewalld
     state: stopped
-    enabled: False
+    enabled: false
   when: ansible_os_family == "RedHat"
